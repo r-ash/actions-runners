@@ -1,0 +1,35 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_US
+  keyboard:
+    layout: us
+  updates: security
+  apt:
+    disable_suites: [security]
+  ssh:
+    install-server: true
+    allow-pw: false
+    disable_root: true
+    ssh_quiet_keygen: true
+    allow_public_ssh_keys: true
+  packages:
+    - qemu-guest-agent
+    - sudo
+  storage:
+    layout:
+      name: direct
+    swap:
+      size: 0
+  user-data:
+    package_upgrade: false
+    timezone: UTC
+    users:
+      - name: rob
+        groups: [adm, sudo]
+        lock-passwd: false
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        shell: /bin/bash
+        ssh_authorized_keys:
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCXkppxm/2pXDfEadUaUGdKBPLnSpFbcJkEmndthYWpCHXOmO0hK8tD3WFxWgVOZPlrqpVsSzJ6Cabj19yuxoWskUayuQ+5bc5BZz6NhoL/lJsqBLGDqZ5h7NspjjTat/AI/Nzb8K3ZNmD3SKpKDSbyqg0K6LGfAHV/agjUjS60dEaYJXX57yVq1zcydwEXb6nF95bxcGIjVfmlXL8dx4efD8kNCX0ITlHLaKo3ZzX5DwOEGFB8DqpUaY8pZ+dxPoATsgyBMjrqftP4dOxLlSkwluZnb0/SY8c3pfOQIjBJX0mhdYpvV4ZGxNa/G2+nUuMZT3WydJ87BetK8I/nN7uDD5gUpl/w002Z8HfVhuWLzOc09p9ySuKXBvDMDseIKQgG9QiYNbOuEz57njBkPS4R4bkXfOlufCVruQ+6JhmnWOvILpgwYFuE1SSuauhOI9iy/VjnD/org/J6m+JmAQKkl0MUohR8S5nfi7rfHPxM+nhgbw3t1v7FQGuGE3g/ons= rob@greenteeth
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKk8ehH/qOjQfM/w7MkuS5P2o/sDVNjvvu6CFOSyDcKR rob@greenteeth
