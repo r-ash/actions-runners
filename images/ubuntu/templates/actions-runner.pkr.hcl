@@ -1,7 +1,6 @@
 # Ubuntu Server Noble
 # ---
 # Packer Template to create an Ubuntu Server (Noble) on Proxmox
-
 packer {
   required_plugins {
     name = {
@@ -10,7 +9,6 @@ packer {
     }
   }
 }
-
 
 # Variable Definitions
 variable "proxmox_api_url" {
@@ -41,6 +39,11 @@ variable "ssh_username" {
   default = "rob"
 }
 
+variable "runner_template_id" {
+  type    = string
+  default = 500
+}
+
 # Resource Definition for the VM Template
 source "proxmox-iso" "ubuntu-server-noble-template" {
 
@@ -52,7 +55,7 @@ source "proxmox-iso" "ubuntu-server-noble-template" {
 
     # VM General Settings
     node = "ash"
-    vm_id = "500"
+    vm_id = var.runner_template_id
     vm_name = "ubuntu-server-noble-template"
     template_description = "Ubuntu Server Noble (24.04) Image"
 
@@ -114,6 +117,7 @@ source "proxmox-iso" "ubuntu-server-noble-template" {
     ssh_username = "${var.ssh_username}"
     #ssh_agent_auth = true
     ssh_private_key_file = "~/projects/homelab/.ssh/id_ed25519"
+    ssh_clear_authorized_keys = true
 
     # Raise the timeout, when installation takes longer
     ssh_timeout = "55m"
