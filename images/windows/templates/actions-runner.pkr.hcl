@@ -210,35 +210,30 @@ build {
         ]
     }
 
-    provisioner "powershell" {
-        script = "${path.root}/../scripts/build/Install-CloudBase.ps1"
-    }
+    # provisioner "powershell" {
+    #     script = "${path.root}/../scripts/build/Install-CloudBase.ps1"
+    # }
 
     provisioner "powershell" {
         environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
         scripts = [
             "${path.root}/../scripts/build/Configure-WindowsDefender.ps1",
+            "${path.root}/../scripts/build/Install-WindowsFeatures.ps1",
             "${path.root}/../scripts/build/Install-Chocolatey.ps1",
             "${path.root}/../scripts/build/Configure-BaseImage.ps1"
         ]
     }
 
     provisioner "windows-restart" {
+        check_registry = true
+        restart_timeout = "10m"
     }
 
     provisioner "powershell" {
         environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}", "DOCKER_VERSION=26.1.3"]
         scripts = [
-            "${path.root}/../scripts/build/Install-Docker.ps1"
-        ]
-    }
-
-    provisioner "windows-restart" {
-    }
-
-    provisioner "powershell" {
-        environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}", "DOCKER_VERSION=26.1.3"]
-        scripts = [
+            "${path.root}/../scripts/build/Install-Docker.ps1",
+            "${path.root}/../scripts/build/Install-Docker-ce.ps1",
             "${path.root}/../scripts/build/Install-DockerWinCred.ps1",
             "${path.root}/../scripts/build/Install-PowershellCore.ps1",
             "${path.root}/../scripts/build/Install-Runner.ps1"
@@ -246,6 +241,7 @@ build {
     }
 
     provisioner "windows-restart" {
+        restart_timeout = "10m"
     }
 
     provisioner "windows-update" {

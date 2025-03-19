@@ -45,19 +45,19 @@ variable "runner_template_id" {
 }
 
 # Resource Definition for the VM Template
-source "proxmox-iso" "ubuntu-server-noble-template" {
+source "proxmox-iso" "ubuntu-noble-actions-runner" {
 
     # Proxmox Connection Settings
     proxmox_url = "${var.proxmox_api_url}"
     username = "${var.proxmox_api_token_id}"
     token = "${var.proxmox_api_token_secret}"
     insecure_skip_tls_verify = true
+    node = "ash"
 
     # VM General Settings
-    node = "ash"
     vm_id = var.runner_template_id
-    vm_name = "ubuntu-server-noble-template"
-    template_description = "Ubuntu Server Noble (24.04) Image"
+    vm_name = "ubuntu-noble-actions-runner-template"
+    template_description = "Ubuntu Server Noble (24.04) GH actions runner image"
 
     # VM OS Settings
     boot_iso {
@@ -126,9 +126,9 @@ source "proxmox-iso" "ubuntu-server-noble-template" {
 # Build Definition to create the VM Template
 build {
 
-    name = "ubuntu-server-noble"
+    name = "ubuntu-noble-actions-runner"
     sources = [
-        "source.proxmox-iso.ubuntu-server-noble-template"
+        "source.proxmox-iso.ubuntu-noble-actions-runner"
     ]
 
     provisioner "shell" {

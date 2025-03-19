@@ -180,9 +180,9 @@ function Invoke-DownloadWithRetry {
         [string] $Path
     )
 
-    Write-Host "==== Environment Variables ===="
-    Get-ChildItem Env: | Sort-Object Name | ForEach-Object { Write-Host "$($_.Name) = $($_.Value)" }
-    Write-Host "$envs"
+    #Write-Host "==== Environment Variables ===="
+    #Get-ChildItem Env: | Sort-Object Name | ForEach-Object { Write-Host "$($_.Name) = $($_.Value)" }
+    #Write-Host "$envs"
 
     Write-Host "From invoke-downloadwithretry ${env:TEMP_DIR}"
 
@@ -592,9 +592,9 @@ function Get-GithubReleasesByVersion {
         [switch] $WithAssetsOnly
     )
 
-    Write-Host "==== Environment Variables ===="
-    Get-ChildItem Env: | Sort-Object Name | ForEach-Object { Write-Host "$($_.Name) = $($_.Value)" }
-    Write-Host "$envs"
+    #Write-Host "==== Environment Variables ===="
+    #Get-ChildItem Env: | Sort-Object Name | ForEach-Object { Write-Host "$($_.Name) = $($_.Value)" }
+    #Write-Host "$envs"
 
     Write-Host "From Get-GithubReleasesByVersion ${env:TEMP_DIR}"
     Write-Host "github-releases_$($Repository -replace "/", "_").json"

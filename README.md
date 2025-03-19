@@ -1,6 +1,6 @@
 # GH Actions Proxmox Runners
 
-This repo provides setup for creating GH actions runners on proxmox. It is inspired by [actions/runner-images repo](https://github.com/actions/runner-images) with modification for this to work on proxmox. VM templates are build using packer and then can be run up vis terraform.
+This repo provides setup for creating GH actions runners on proxmox. It is inspired by [actions/runner-images repo](https://github.com/actions/runner-images) with modification for this to work on proxmox. VM templates are build using packer and then can be run up using terraform.
 
 ## Usage
 
@@ -39,7 +39,16 @@ To create a new VM from the template
 
 ### Deploying from template
 
-1. From the `deploy/ubuntu` directory run `terraform apply`
-1. Depending on how many runners you are starting up you might need to set the `runner_name` variable and the the fixed IP address
+1. Create a github token with `admin:org` permission, save it as an env var called `GITHUB_TOKEN`
+1. Run the script `./deploy/ubuntu/start-new.sh --org=hivtools`, this will get a runner registration token for the specified org and then spin up the actions runner from the proxmox VM template using terraform
 
 For configuration of the created proxmox VM see [bpg/proxmox docs](https://registry.terraform.io/providers/bpg/proxmox/latest/docs/resources/virtual_environment_vm)
+
+## Setup
+
+The setup for windows and ubuntu runners is slightly different due to pain points getting them both up and running. The rough lifecycle is as follows:
+
+1. Proxmox template VMs are built using packer, these install dependencies used to run as GitHub actions runners
+2. We use terraform to clone the proxmox templates into a running VM on proxmox
+3. With Ubuntu we use cloud-init script to add ssh keys and start the GitHub actions service
+4. With Windows we use ansible to add ssh keys and start the GitHub actions service
