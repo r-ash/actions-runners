@@ -1,0 +1,27 @@
+################################################################################
+##  File:  StartRunner.ps1
+##  Desc:  Start the GithubActions runner
+################################################################################
+
+$zipFile = Get-ChildItem -Path 'C:\ProgramData\runner\' -Filter 'actions-runner-*.zip' | Select-Object -First 1
+
+if (-not $zipFile) {
+    Write-Error 'No actions-runner zip file found in C:\ProgramData\runner'
+    exit 1
+}
+
+$zipPath = $zipFile.FullName
+$extractPath = 'C:\actions-runner'
+
+# Ensure target directory exists
+if (-not (Test-Path $extractPath)) {
+    New-Item -ItemType Directory -Path $extractPath | Out-Null
+}
+
+# Extract the zip file
+Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
+
+# Change to the extracted directory
+Set-Location $extractPath
+
+.\config.cmd --url https://github.com/{{ runner_org }} --token {{ runner_token }} --unattended --runasservice --replace

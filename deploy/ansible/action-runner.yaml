@@ -1,0 +1,13 @@
+- name: Start GHActions runner on Windows VM
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Copy PowerShell script to Windows VM
+      ansible.windows.win_template:
+        src: ./StartRunner.ps1.j2
+        dest: C:\StartRunner.ps1
+
+    - name: Execute PowerShell script
+      ansible.windows.win_shell: |
+        powershell -ExecutionPolicy Bypass -File C:\StartRunner.ps1

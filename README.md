@@ -13,13 +13,15 @@ You have to set the following env vars, or provide them via packer & terraform v
 * PKR_VAR_proxmox_api_url - The URL to your proxmox server API e.g. `https://192.168.1.200:8006/api2/json`
 * PKR_VAR_proxmox_api_token_id - the API token ID created above
 * PKR_VAR_proxmox_api_token_secret - the API token secret created above
+* PKR_VAR_winrm_password - password for connecting to windows host via WinRM
 * TF_VAR_proxmox_api_url - The URL to your proxmox server API e.g. `https://192.168.1.200:8006/api2/json`
 * TF_VAR_proxmox_api_token_id - the API token ID created above
 * TF_VAR_proxmox_api_token_secret - the API token secret created above
 * TF_VAR_runner_token - token for GH actions for your org or repo, passed to GH actions runner `./config.sh` script
-
-You can optionally set
-* TF_VAR_runner_org - to set the org the GH actions runner should belong to
+* TF_VAR_winrm_password - password for connecting to windows host via WinRM
+* PROXMOX_HOST - The IP without port of the proxmox host e.g. `192.168.1.200`
+* PROXMOX_SSH_USER - SSH user to connect to proxmox host
+* WINRM_PASSWORD - password for connecting to windows host via WinRM
 
 ### Build template with packer
 
@@ -51,4 +53,12 @@ The setup for windows and ubuntu runners is slightly different due to pain point
 1. Proxmox template VMs are built using packer, these install dependencies used to run as GitHub actions runners
 2. We use terraform to clone the proxmox templates into a running VM on proxmox
 3. With Ubuntu we use cloud-init script to add ssh keys and start the GitHub actions service
-4. With Windows we use ansible to add ssh keys and start the GitHub actions service
+4. With Windows we use ansible to start the GitHub actions service
+
+## TODO
+
+Still some tidying up of this would be worth doing
+
+1. Add a script for cleanly shutting down existing GitHub actions runners (unregister them from GitHub and remove the VM on proxmox)
+2. Rebuild the templates
+3. Setup CRON job to automatically shut down existing runners and restart them on some regular basis and a CRON job for rebuild the packer images on some schedule
