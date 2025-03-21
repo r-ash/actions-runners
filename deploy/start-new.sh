@@ -64,9 +64,11 @@ function get_windows_vm_ip {
 # Function to process all Windows VMs
 function process_windows_vms {
   # Capture Windows VM IDs from Terraform
-  local windows_vm_ids=$(terraform -chdir=$here/terraform output -json windows_vm_ids | jq -r '.[]')
+  local WINDOWS_VMS_JSON=$(terraform -chdir=$here/terraform output -json windows_vms)
+  WINDOWS_IDS=($(echo "$WINDOWS_VMS_JSON" | jq -r '.ids[]'))
+  WINDOWS_NAMES=($(echo "$WINDOWS_VMS_JSON" | jq -r '.names[]'))
 
-  for vm_id in $windows_vm_ids; do
+  for vm_id in $WINDOWS_IDS; do
     echo "Fetching IP for VM ID: $vm_id"
     ip=$(get_windows_vm_ip "$vm_id")
     if [[ -n "$ip" ]]; then
@@ -97,8 +99,13 @@ sleep 10s
 WINDOWS_IPS=()
 process_windows_vms
 
-ansible-playbook ansible/action-runner.yaml -i "$(IFS=,; echo "${WINDOWS_IPS[*]}," )" \
-  -e "ansible_user=Administrator ansible_password=$WINRM_PASSWORD ansible_connection=winrm ansible_winrm_server_cert_validation=ignore ansible_winrm_port=5985" \
-  -e "runner_org=$ORG runner_token=$RUNNER_TOKEN"
+for i in "${!WINDOWS_IPS[@]}"; do
+    VM_IP="${WINDOWS_IPS[i]}"
+    VM_NAME="${WINDOWS_NAMES[i]}"
 
+    echo "Ansible configuring VM: $VM_NAME ($VM_IP)"
 
+    ansible-playbook ansible/action-runner.yaml -i "$VM_IP," \
+      -e "ansible_user=Administrator ansible_password=$WINRM_PASSWORD ansible_connection=winrm ansible_winrm_server_cert_validation=ignore ansible_winrm_port=5985" \
+      -e "runner_org=$ORG runner_token=$RUNNER_TOKEN runner_name=$VM_NAME"
+  done

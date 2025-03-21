@@ -137,7 +137,7 @@ source "proxmox-iso" "windows-actions-runner" {
     scsi_controller = "virtio-scsi-single"
 
     disks {
-        disk_size = "25G"
+        disk_size = "40G"
         format = "raw"
         storage_pool = "local-lvm"
         type = "virtio"
@@ -236,7 +236,21 @@ build {
             "${path.root}/../scripts/build/Install-Docker-ce.ps1",
             "${path.root}/../scripts/build/Install-DockerWinCred.ps1",
             "${path.root}/../scripts/build/Install-PowershellCore.ps1",
-            "${path.root}/../scripts/build/Install-Runner.ps1"
+            "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1"
+        ]
+    }
+
+    provisioner "windows-restart" {
+        restart_timeout = "10m"
+    }
+
+    provisioner "powershell" {
+        environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}", "DOCKER_VERSION=26.1.3"]
+        scripts = [
+            "${path.root}/../scripts/build/Install-ActionsCache.ps1",
+            "${path.root}/../scripts/build/Install-Runner.ps1",
+            "${path.root}/../scripts/build/Install-Spectrum.ps1",
+            "${path.root}/../scripts/build/Install-Git.ps1"
         ]
     }
 

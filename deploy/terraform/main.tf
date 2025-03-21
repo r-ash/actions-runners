@@ -100,6 +100,9 @@ module "windows_runner" {
   vm_id          = each.value.vm_id
 }
 
-output "windows_vm_ids" {
-  value = [for vm in var.vm_configs : vm.vm_id if vm.os == "windows"]
+output "windows_vms" {
+  value = {
+    ids   = [for vm in var.vm_configs : vm.vm_id if vm.os == "windows"]
+    names = [for vm in var.vm_configs : vm.name if vm.os == "windows"]
+  }
 }

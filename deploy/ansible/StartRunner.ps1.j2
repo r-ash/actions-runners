@@ -3,6 +3,15 @@
 ##  Desc:  Start the GithubActions runner
 ################################################################################
 
+####### Prep work
+
+# Expand the drive to fill available space
+$drive_letter = "C"
+$size = (Get-PartitionSupportedSize -DriveLetter $drive_letter)
+Resize-Partition -DriveLetter $drive_letter -Size $size.SizeMax
+
+# Extract the actions runner
+
 $zipFile = Get-ChildItem -Path 'C:\ProgramData\runner\' -Filter 'actions-runner-*.zip' | Select-Object -First 1
 
 if (-not $zipFile) {
@@ -24,4 +33,8 @@ Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
 # Change to the extracted directory
 Set-Location $extractPath
 
-.\config.cmd --url https://github.com/{{ runner_org }} --token {{ runner_token }} --unattended --runasservice --replace
+.\config.cmd --name {{ runner_name }} --url https://github.com/{{ runner_org }} --token {{ runner_token }} --unattended --runasservice --replace
+
+$runner_service = (Get-Service actions.runner.*).name
+cmd.exe /c "sc config `"$runner_service`" obj= `"NT AUTHORITY\System`" type= own"
+Restart-Service actions.runner.*

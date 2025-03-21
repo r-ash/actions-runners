@@ -12,7 +12,7 @@ terraform {
 resource "proxmox_virtual_environment_vm" "actions_runner" {
   name      = var.name
   node_name = "ash"
-  vm_id = var.vm_id
+  vm_id     = var.vm_id
 
   clone {
     vm_id = var.runner_template_id
@@ -29,6 +29,13 @@ resource "proxmox_virtual_environment_vm" "actions_runner" {
 
   memory {
     dedicated = var.memory
+  }
+
+  disk {
+    size         = 50
+    file_format  = "raw"
+    datastore_id = "local-lvm"
+    interface    = "virtio0"
   }
 }
 
