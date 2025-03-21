@@ -105,7 +105,7 @@ for i in "${!WINDOWS_IPS[@]}"; do
 
     echo "Ansible configuring VM: $VM_NAME ($VM_IP)"
 
-    ansible-playbook ansible/action-runner.yaml -i "$VM_IP," \
+    ansible-playbook $here/ansible/action-runner.yaml -i "$VM_IP," \
       -e "ansible_user=Administrator ansible_password=$WINRM_PASSWORD ansible_connection=winrm ansible_winrm_server_cert_validation=ignore ansible_winrm_port=5985" \
       -e "runner_org=$ORG runner_token=$RUNNER_TOKEN runner_name=$VM_NAME"
   done
