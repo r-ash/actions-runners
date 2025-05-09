@@ -107,5 +107,7 @@ for i in "${!WINDOWS_IPS[@]}"; do
 
     ansible-playbook $here/ansible/action-runner.yaml -i "$VM_IP," \
       -e "ansible_user=Administrator ansible_password=$WINRM_PASSWORD ansible_connection=winrm ansible_winrm_server_cert_validation=ignore ansible_winrm_port=5985" \
-      -e "runner_org=$ORG runner_token=$RUNNER_TOKEN runner_name=$VM_NAME"
-  done
+      -e "runner_org=$ORG runner_token=$RUNNER_TOKEN runner_name=$VM_NAME admin_password=$WINRM_PASSWORD"
+done
+
+echo "Log onto the Windows VMs and manually sync the orderly-sharepoint onedrive, and ensure that it is set to 'Download all files'"

@@ -13,3 +13,6 @@ Start-Process -FilePath $destinationPath /S -Wait
 $envName = "SPECTRUM_EXE_PATH"
 $envValue = "C:\Program Files (x86)\Spectrum6\SPECTRUM.EXE"
 [System.Environment]::SetEnvironmentVariable($envName, $envValue, [System.EnvironmentVariableTarget]::Machine)
+
+# Add to PATH
+Add-MachinePathItem "C:\Program Files (x86)\Spectrum6"

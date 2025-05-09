@@ -42,7 +42,7 @@ To create a new VM from the template
 ### Deploying from template
 
 1. Create a github token with `admin:org` permission, save it as an env var called `GITHUB_TOKEN`
-1. Run the script `./deploy/ubuntu/start-new.sh --org=hivtools`, this will get a runner registration token for the specified org and then spin up the actions runner from the proxmox VM template using terraform
+1. Run the script `./deploy/start-new.sh --org=hivtools`, this will get a runner registration token for the specified org and then spin up the actions runner from the proxmox VM template using terraform
 
 For configuration of the created proxmox VM see [bpg/proxmox docs](https://registry.terraform.io/providers/bpg/proxmox/latest/docs/resources/virtual_environment_vm)
 

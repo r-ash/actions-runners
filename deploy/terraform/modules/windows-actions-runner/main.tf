@@ -32,7 +32,7 @@ resource "proxmox_virtual_environment_vm" "actions_runner" {
   }
 
   disk {
-    size         = 50
+    size         = 80
     file_format  = "raw"
     datastore_id = "local-lvm"
     interface    = "virtio0"

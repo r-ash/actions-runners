@@ -36,5 +36,5 @@ Set-Location $extractPath
 .\config.cmd --name {{ runner_name }} --url https://github.com/{{ runner_org }} --token {{ runner_token }} --unattended --runasservice --replace
 
 $runner_service = (Get-Service actions.runner.*).name
-cmd.exe /c "sc config `"$runner_service`" obj= `"NT AUTHORITY\System`" type= own"
+cmd.exe /c "sc config `"$runner_service`" obj= `".\Administrator`" password= `"{{ admin_password }}`" type= own"
 Restart-Service actions.runner.*

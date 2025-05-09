@@ -12,3 +12,6 @@ $downloadUrl = Resolve-GithubReleaseAssetUrl `
 $fileName = Split-Path $downloadUrl -Leaf
 New-Item -Path "C:\ProgramData\runner" -ItemType Directory
 Invoke-DownloadWithRetry -Url $downloadUrl -Path "C:\ProgramData\runner\$fileName"
+
+Write-Host "Assigning permission for admin user to run GHA runner as a service"
+Set-UserRights -AddRight -Username $env:USERDOMAIN\Administrator -UserRight SeServiceLogonRight

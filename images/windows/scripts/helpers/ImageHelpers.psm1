@@ -36,3 +36,8 @@ Export-ModuleMember -Function @(
     'Add-MachinePathItem'
     'Add-DefaultPathItem'
 )
+
+. $PSScriptRoot\UserHelpers.ps1
+Export-ModuleMember -Function @(
+    'Set-UserRights'
+)
