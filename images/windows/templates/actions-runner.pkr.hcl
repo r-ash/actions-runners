@@ -250,7 +250,8 @@ build {
             "${path.root}/../scripts/build/Install-ActionsCache.ps1",
             "${path.root}/../scripts/build/Install-Runner.ps1",
             "${path.root}/../scripts/build/Install-Spectrum.ps1",
-            "${path.root}/../scripts/build/Install-Git.ps1"
+            "${path.root}/../scripts/build/Install-Git.ps1",
+            "${path.root}/../scripts/build/Install-CosmosDbEmulator.ps1"
         ]
     }
 
